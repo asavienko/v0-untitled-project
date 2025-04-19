@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { EnhancedSidebar } from "./enhanced-sidebar"
+import { MobileOrganizationView } from "./mobile-organization-view"
 import { OverviewView } from "./overview/overview-view"
 import { VaultsView } from "./vaults/vaults-view"
 import { MembersView } from "./members/members-view"
@@ -11,6 +12,7 @@ import { SettingsView } from "./settings/settings-view"
 import { AnalyticsView } from "./analytics/analytics-view"
 import { SecurityView } from "./security/security-view"
 import { IntegrationsView } from "./integrations/integrations-view"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface OrganizationViewProps {
   organizationSlug: string
@@ -20,6 +22,7 @@ interface OrganizationViewProps {
 export function OrganizationView({ organizationSlug, isTestOrg }: OrganizationViewProps) {
   const [activeSection, setActiveSection] = useState("overview")
   const [isLoading, setIsLoading] = useState(true)
+  const isMobile = useIsMobile()
 
   // Safely check if organizationSlug starts with @ by providing a default empty string if undefined
   const organizationName = !organizationSlug
@@ -62,6 +65,20 @@ export function OrganizationView({ organizationSlug, isTestOrg }: OrganizationVi
     return () => clearTimeout(timer)
   }, [])
 
+  // Render mobile view for small screens
+  if (isMobile) {
+    return (
+      <MobileOrganizationView
+        organization={organization}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        isLoading={isLoading}
+        isAdmin={isTestOrg}
+      />
+    )
+  }
+
+  // Render desktop view with sidebar
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-full">
@@ -75,8 +92,8 @@ export function OrganizationView({ organizationSlug, isTestOrg }: OrganizationVi
           isLoading={isLoading}
         />
 
-        {/* Main Content */}
-        <SidebarInset className="bg-background">
+        {/* Main Content - The SidebarInset will automatically adjust based on sidebar state */}
+        <SidebarInset className="flex-1 bg-background">
           <div className="h-full overflow-auto">
             {isLoading ? (
               <div className="flex h-full w-full items-center justify-center">

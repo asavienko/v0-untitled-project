@@ -15,7 +15,7 @@ interface PageProps {
 export default async function NewView({ params }: PageProps) {
   return (
     <div className="h-screen">
-      <OrganizationView organizationSlug={params.slug} isTestOrg={params.slug === 'test-yiyi'} />
+      <OrganizationView organizationSlug={params.slug} isTestOrg={params.slug === "test-yiyi"} />
     </div>
   )
 }
