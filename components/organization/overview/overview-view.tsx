@@ -193,12 +193,6 @@ export function OverviewView({ organization }: OverviewViewProps) {
           <p className="text-muted-foreground">{organization?.description}</p>
           <p className="text-sm text-muted-foreground mt-1">Created on {organization?.createdAt}</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Plus className="h-4 w-4 mr-1" /> New Vault
-          </Button>
-          <Button size="sm">Manage Organization</Button>
-        </div>
       </div>
 
       {/* Tabs for different overview sections */}
@@ -251,7 +245,6 @@ export function OverviewView({ organization }: OverviewViewProps) {
               value={activeTab}
               onChange={(e) => setActiveTab(e.target.value)}
               className="bg-transparent border rounded-md px-2 py-1 text-sm"
-              aria-label="Select tab"
             >
               <option value="metrics">Metrics</option>
               <option value="activity">Recent Activity</option>
@@ -261,7 +254,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
           </div>
 
           {/* Visual indicator for active tab */}
-          <div className="grid grid-cols-4 gap-1 mb-4">
+          <div className="grid grid-cols-4 gap-1 mb-6">
             <div
               className={`h-1 rounded-full transition-colors duration-300 ${activeTab === "metrics" ? "bg-primary" : "bg-gray-200"}`}
             ></div>
@@ -278,7 +271,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </div>
 
         {/* Metrics Tab */}
-        <TabsContent value="metrics" className="space-y-4 animate-in fade-in duration-300">
+        <TabsContent value="metrics" className="space-y-4 animate-in fade-in-50 duration-300">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {metrics.map((metric, index) => (
               <Card key={index}>
@@ -363,7 +356,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* Activity Tab */}
-        <TabsContent value="activity" className="animate-in fade-in duration-300">
+        <TabsContent value="activity" className="animate-in fade-in-50 duration-300">
           <Card>
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
@@ -400,7 +393,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* System Status Tab */}
-        <TabsContent value="status" className="animate-in fade-in duration-300">
+        <TabsContent value="status" className="animate-in fade-in-50 duration-300">
           <Card>
             <CardHeader>
               <CardTitle>System Status</CardTitle>
@@ -431,48 +424,10 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* Team Tab */}
-        <TabsContent value="team" className="animate-in fade-in duration-300">
+        <TabsContent value="team" className="animate-in fade-in-50 duration-300">
           <MembersPanel />
         </TabsContent>
       </Tabs>
-      {/* Bottom navigation bar for mobile */}
-      <div className="md:hidden">
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t z-10 px-2">
-          <TabsList className="h-16 w-full bg-transparent">
-            <TabsTrigger
-              value="metrics"
-              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
-            >
-              <Database className="h-5 w-5" />
-              <span className="text-xs">Metrics</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="activity"
-              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
-            >
-              <Activity className="h-5 w-5" />
-              <span className="text-xs">Activity</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="status"
-              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
-            >
-              <CheckCircle2 className="h-5 w-5" />
-              <span className="text-xs">Status</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="team"
-              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
-            >
-              <Users className="h-5 w-5" />
-              <span className="text-xs">Team</span>
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        {/* Add padding to prevent content from being hidden behind the bottom nav */}
-        <div className="pb-16 md:pb-0"></div>
-      </div>
     </div>
   )
 }

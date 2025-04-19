@@ -1,7 +1,26 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, ChevronDown, User, LogOut, Key, Shield, Star, Plus } from "lucide-react"
+import {
+  Menu,
+  X,
+  ChevronDown,
+  User,
+  LogOut,
+  Key,
+  Shield,
+  Star,
+  Plus,
+  Home,
+  Database,
+  Users,
+  Activity,
+  FileText,
+  BarChart3,
+  Settings,
+  Zap,
+  Lock,
+} from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
@@ -66,15 +85,15 @@ export function MobileOrganizationView({
 
   // Navigation items for mobile menu
   const navItems = [
-    { id: "overview", label: "Overview", count: 0 },
-    { id: "vaults", label: "Vaults", count: organization.vaults || 0 },
-    { id: "members", label: "Members", count: organization.members || 0 },
-    { id: "activity", label: "Activity", count: 15 },
-    { id: "reports", label: "Reports", count: 2 },
-    { id: "analytics", label: "Analytics", count: 0 },
-    { id: "settings", label: "Settings", count: 0 },
-    { id: "security", label: "Security", count: 3 },
-    { id: "integrations", label: "Integrations", count: 0 },
+    { id: "overview", label: "Overview", count: 0, icon: Home },
+    { id: "vaults", label: "Vaults", count: organization.vaults || 0, icon: Database },
+    { id: "members", label: "Members", count: organization.members || 0, icon: Users },
+    { id: "activity", label: "Activity", count: 15, icon: Activity },
+    { id: "reports", label: "Reports", count: 2, icon: FileText },
+    { id: "analytics", label: "Analytics", count: 0, icon: BarChart3 },
+    { id: "settings", label: "Settings", count: 0, icon: Settings },
+    { id: "security", label: "Security", count: 3, icon: Lock },
+    { id: "integrations", label: "Integrations", count: 0, icon: Zap },
   ]
 
   // Toggle favorite status
@@ -84,12 +103,12 @@ export function MobileOrganizationView({
 
   // Admin navigation items
   const adminNavItems = [
-    { id: "admin-users", label: "Users" },
-    { id: "admin-organizations", label: "Organizations" },
-    { id: "admin-vaults", label: "Vaults" },
-    { id: "admin-caches", label: "Caches" },
-    { id: "admin-computes", label: "Computes" },
-    { id: "admin-credits", label: "Credits" },
+    { id: "admin-users", label: "Users", icon: Users },
+    { id: "admin-organizations", label: "Organizations", icon: Database },
+    { id: "admin-vaults", label: "Vaults", icon: Database },
+    { id: "admin-caches", label: "Caches", icon: Database },
+    { id: "admin-computes", label: "Computes", icon: BarChart3 },
+    { id: "admin-credits", label: "Credits", icon: FileText },
   ]
 
   // Handle navigation item click
@@ -139,118 +158,8 @@ export function MobileOrganizationView({
     <div className="flex flex-col h-full">
       {/* Mobile Header */}
       <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background px-4">
-        {/* Left side - Menu button */}
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle menu</span>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[80%] max-w-[300px] p-0" closeButton={false}>
-              <div className="flex flex-col h-full">
-                {/* Mobile Menu Header */}
-                <div className="flex items-center justify-between border-b p-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                      {organization.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h2 className="text-sm font-medium">{organization.name}</h2>
-                      <p className="text-xs text-muted-foreground">{organization.type}</p>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                    <X className="h-5 w-5" />
-                  </Button>
-                </div>
-
-                {/* Mobile Menu Navigation */}
-                <div className="flex-1 overflow-auto py-2">
-                  <div className="px-2 py-1">
-                    <p className="px-3 text-xs font-medium text-muted-foreground">Navigation</p>
-                    <nav className="mt-2 space-y-1">
-                      {navItems.map((item) => (
-                        <button
-                          key={item.id}
-                          className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-sm ${
-                            activeSection === item.id
-                              ? "bg-primary text-primary-foreground"
-                              : "text-foreground hover:bg-muted"
-                          }`}
-                          onClick={() => handleNavClick(item.id)}
-                        >
-                          <span>{item.label}</span>
-                          {item.count > 0 && (
-                            <Badge
-                              variant={activeSection === item.id ? "outline" : "secondary"}
-                              className={activeSection === item.id ? "bg-primary-foreground text-primary" : ""}
-                            >
-                              {item.count}
-                            </Badge>
-                          )}
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-
-                  {/* Admin Section */}
-                  {isAdmin && (
-                    <div className="mt-4 border-t px-2 py-3">
-                      <p className="px-3 text-xs font-medium text-muted-foreground">Admin</p>
-                      <nav className="mt-2 space-y-1">
-                        {adminNavItems.map((item) => (
-                          <button
-                            key={item.id}
-                            className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm text-foreground hover:bg-muted"
-                          >
-                            <span>{item.label}</span>
-                          </button>
-                        ))}
-                      </nav>
-                    </div>
-                  )}
-                </div>
-
-                {/* Mobile Menu Footer */}
-                <div className="border-t p-4">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="w-full justify-start px-2">
-                        <div className="flex items-center gap-2">
-                          <UserAvatar className="h-8 w-8" />
-                          <div className="flex flex-col items-start">
-                            <span className="text-sm">YiYi</span>
-                            <span className="text-xs text-muted-foreground">yiyi@example.com</span>
-                          </div>
-                          <ChevronDown className="ml-auto h-4 w-4" />
-                        </div>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56">
-                      <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Profile</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Shield className="mr-2 h-4 w-4" />
-                        <span>Admin Token</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Key className="mr-2 h-4 w-4" />
-                        <span>Access Token</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Sign out</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </Button>
+        {/* Left side - Empty space (menu button removed) */}
+        <div className="w-8"></div>
 
         {/* Center - Organization dropdown */}
         <div className="flex-1 flex justify-center">
@@ -307,8 +216,8 @@ export function MobileOrganizationView({
           </DropdownMenu>
         </div>
 
-        {/* Right side - Empty space now that buttons are removed */}
-        <div className="flex items-center gap-2">{/* Notification and user buttons removed */}</div>
+        {/* Right side - Empty space */}
+        <div className="w-8"></div>
       </header>
 
       {/* Mobile Section Title */}
@@ -320,7 +229,157 @@ export function MobileOrganizationView({
       <main className="flex-1 overflow-auto">{renderContent()}</main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="sticky bottom-0 z-10 flex h-14 items-center justify-around border-t bg-background">
+      <nav className="sticky bottom-0 z-10 flex h-14 border-t bg-background" style={{ width: "100%" }}>
+        {/* Menu Button (Left Side) */}
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <button className="flex flex-1 flex-col items-center justify-center h-full text-muted-foreground">
+              <Menu className="h-5 w-5 mb-1" />
+              <span className="text-xs">Menu</span>
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[80%] max-w-[300px] p-0" closeButton={false}>
+            <div className="flex flex-col h-full">
+              {/* Mobile Menu Header */}
+              <div className="flex items-center justify-between border-b p-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                    {organization.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h2 className="text-sm font-medium">{organization.name}</h2>
+                    <p className="text-xs text-muted-foreground">{organization.type}</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              {/* Mobile Menu Navigation */}
+              <div className="flex-1 overflow-auto py-4">
+                {/* Primary Navigation */}
+                <div className="px-3 mb-6">
+                  <p className="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                    Navigation
+                  </p>
+                  <nav className="space-y-1.5">
+                    {navItems.slice(0, 5).map((item) => (
+                      <button
+                        key={item.id}
+                        className={`flex w-full items-center gap-3 rounded-md px-3 py-3 text-sm border ${
+                          activeSection === item.id
+                            ? "border-primary/50 text-primary"
+                            : "border-transparent text-foreground hover:bg-muted/30"
+                        }`}
+                        onClick={() => handleNavClick(item.id)}
+                      >
+                        <item.icon
+                          className={`h-4 w-4 ${activeSection === item.id ? "text-primary" : "text-muted-foreground"}`}
+                        />
+                        <span>{item.label}</span>
+                        {item.count > 0 && (
+                          <Badge variant="outline" className="ml-auto">
+                            {item.count}
+                          </Badge>
+                        )}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+                {/* Secondary Navigation */}
+                <div className="px-3 mb-6">
+                  <p className="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                    Settings
+                  </p>
+                  <nav className="space-y-1.5">
+                    {navItems.slice(5).map((item) => (
+                      <button
+                        key={item.id}
+                        className={`flex w-full items-center gap-3 rounded-md px-3 py-3 text-sm border ${
+                          activeSection === item.id
+                            ? "border-primary/50 text-primary"
+                            : "border-transparent text-foreground hover:bg-muted/30"
+                        }`}
+                        onClick={() => handleNavClick(item.id)}
+                      >
+                        <item.icon
+                          className={`h-4 w-4 ${activeSection === item.id ? "text-primary" : "text-muted-foreground"}`}
+                        />
+                        <span>{item.label}</span>
+                        {item.count > 0 && (
+                          <Badge variant="outline" className="ml-auto">
+                            {item.count}
+                          </Badge>
+                        )}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+                {/* Admin Section */}
+                {isAdmin && (
+                  <div className="px-3 pt-4 border-t border-border/50 mx-3">
+                    <p className="px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                      Admin
+                    </p>
+                    <nav className="space-y-1.5">
+                      {adminNavItems.map((item) => (
+                        <button
+                          key={item.id}
+                          className="flex w-full items-center gap-3 rounded-md px-3 py-3 text-sm border border-transparent text-foreground hover:bg-muted/30"
+                        >
+                          <item.icon className="h-4 w-4 text-muted-foreground" />
+                          <span>{item.label}</span>
+                        </button>
+                      ))}
+                    </nav>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Menu Footer */}
+              <div className="border-t p-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-start px-2">
+                      <div className="flex items-center gap-2">
+                        <UserAvatar className="h-8 w-8" />
+                        <div className="flex flex-col items-start">
+                          <span className="text-sm">YiYi</span>
+                          <span className="text-xs text-muted-foreground">yiyi@example.com</span>
+                        </div>
+                        <ChevronDown className="ml-auto h-4 w-4" />
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Shield className="mr-2 h-4 w-4" />
+                      <span>Admin Token</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Key className="mr-2 h-4 w-4" />
+                      <span>Access Token</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sign out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+
+        {/* Other Navigation Items */}
         <button
           className={`flex flex-1 flex-col items-center justify-center h-full ${
             activeSection === "overview" ? "text-primary" : "text-muted-foreground"
