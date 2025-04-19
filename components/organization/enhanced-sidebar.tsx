@@ -246,12 +246,15 @@ export function EnhancedSidebar({
         variant="floating" 
         className={cn(
           "border-r border-border transition-all duration-300",
-          "fixed left-0 top-0 bottom-0 z-20",
+          "fixed left-0 top-0 bottom-0 z-20 overflow-x-hidden",
           state === "collapsed" ? "w-[52px]" : "w-[240px]"
         )}
       >
         <SidebarHeader>
-          <div className="flex items-center gap-2 px-2 py-3">
+          <div className={cn(
+            "flex items-center gap-2 py-3",
+            state === "collapsed" ? "px-1" : "px-2"
+          )}>
             {isLoading ? (
               <div className="flex items-center gap-2 w-full">
                 <Skeleton className="h-6 w-6 rounded-md" />
@@ -261,8 +264,11 @@ export function EnhancedSidebar({
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 outline-none">
-                    <div className="relative flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                  <button className={cn(
+                    "flex items-center gap-2 outline-none",
+                    state === "collapsed" ? "w-10 justify-center" : "w-full"
+                  )}>
+                    <div className="relative flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
                       {currentOrg.name.charAt(0).toUpperCase()}
                       {currentOrg.isFavorite && (
                         <Star className="absolute -top-1 -right-1 h-2.5 w-2.5 fill-yellow-400 text-yellow-400" />
@@ -318,7 +324,10 @@ export function EnhancedSidebar({
               </DropdownMenu>
             )}
             <SidebarTrigger
-              className="ml-auto flex h-8 w-8 items-center justify-center rounded-md hover:bg-accent"
+              className={cn(
+                "flex h-8 items-center justify-center rounded-md hover:bg-accent",
+                state === "collapsed" ? "w-10" : "w-8"
+              )}
               aria-label="Toggle sidebar"
               title={state === "expanded" ? "Collapse sidebar" : "Expand sidebar"}
             >
@@ -328,7 +337,7 @@ export function EnhancedSidebar({
           <SidebarSeparator />
           <div className={cn(
             "transition-all duration-200",
-            state === "expanded" ? "p-2" : "px-2"
+            state === "expanded" ? "p-2" : "p-1"
           )}>
             {state === "expanded" ? (
               <div className="relative">
@@ -348,7 +357,7 @@ export function EnhancedSidebar({
           </div>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent className="overflow-x-hidden">
           {isLoading ? (
             // Loading skeleton for sidebar content
             <>
