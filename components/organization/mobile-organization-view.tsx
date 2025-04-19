@@ -220,11 +220,6 @@ export function MobileOrganizationView({
         <div className="w-8"></div>
       </header>
 
-      {/* Mobile Section Title */}
-      <div className="border-b bg-background px-4 py-3">
-        <h2 className="text-lg font-semibold capitalize">{activeSection}</h2>
-      </div>
-
       {/* Main Content */}
       <main className="flex-1 overflow-auto">{renderContent()}</main>
 
