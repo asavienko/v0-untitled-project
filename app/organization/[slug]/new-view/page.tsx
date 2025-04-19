@@ -6,13 +6,16 @@ export const metadata: Metadata = {
   description: "Organization dashboard for Test-Yiyi",
 }
 
-export default function NewView({ params }: { params: { slug: string } }) {
-  // Check if this is the specific test-yiyi organization
-  const isTestYiyi = params.slug === "test-yiyi"
+interface PageProps {
+  params: {
+    slug: string
+  }
+}
 
+export default async function NewView({ params }: PageProps) {
   return (
     <div className="h-screen">
-      <OrganizationView organizationSlug={params.slug} isTestOrg={isTestYiyi} />
+      <OrganizationView organizationSlug={params.slug} isTestOrg={params.slug === 'test-yiyi'} />
     </div>
   )
 }

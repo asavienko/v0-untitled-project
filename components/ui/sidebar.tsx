@@ -571,11 +571,14 @@ SidebarMenu.displayName = "SidebarMenu"
 
 const SidebarMenuItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<"li">
->(({ className, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<"li"> & {
+    asChild?: boolean
+  }
+>(({ className, asChild = false, ...props }, ref) => {
   const { state } = useSidebar()
+  const Comp = asChild ? Slot : "li"
   return (
-    <li
+    <Comp
       ref={ref}
       data-sidebar="menu-item"
       className={cn(
@@ -617,6 +620,8 @@ const SidebarMenuButton = React.forwardRef<
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    badge?: React.ReactNode
+    badgeVariant?: "default" | "circle"
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -626,6 +631,8 @@ const SidebarMenuButton = React.forwardRef<
       variant = "default",
       size = "default",
       tooltip,
+      badge,
+      badgeVariant = "default",
       className,
       children,
       ...props
@@ -644,20 +651,25 @@ const SidebarMenuButton = React.forwardRef<
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
         {...props}
       >
-        {React.Children.map(children, child => {
-          if (React.isValidElement(child)) {
-            const props = child.props as { className?: string };
-            // If it's an icon (has className containing 'h-4 w-4'), always show it
-            if (props.className?.includes('h-4 w-4')) {
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-2 min-w-0">
+            {React.Children.map(children, child => {
+              if (React.isValidElement(child)) {
+                const props = child.props as { className?: string };
+                if (props.className?.includes('h-4 w-4')) {
+                  return child;
+                }
+                if (state === 'collapsed' && typeof child.type === 'string' && child.type === 'span') {
+                  return null;
+                }
+              }
               return child;
-            }
-            // If it's text content and sidebar is collapsed, don't show it
-            if (state === 'collapsed' && typeof child.type === 'string' && child.type === 'span') {
-              return null;
-            }
-          }
-          return child;
-        })}
+            })}
+          </div>
+          {badge && (
+            <SidebarMenuBadge variant={badgeVariant}>{badge}</SidebarMenuBadge>
+          )}
+        </div>
       </Comp>
     )
 
@@ -719,23 +731,28 @@ SidebarMenuAction.displayName = "SidebarMenuAction"
 
 const SidebarMenuBadge = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-sidebar="menu-badge"
-    className={cn(
-      "absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums text-sidebar-foreground select-none pointer-events-none",
-      "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
-      "peer-data-[size=sm]/menu-button:top-1",
-      "peer-data-[size=default]/menu-button:top-1.5",
-      "peer-data-[size=lg]/menu-button:top-2.5",
-      "group-data-[collapsible=icon]:hidden",
-      className
-    )}
-    {...props}
-  />
-))
+  React.ComponentProps<"div"> & {
+    variant?: "default" | "circle"
+  }
+>(({ className, variant = "default", ...props }, ref) => {
+  const { state } = useSidebar()
+  return (
+    <div
+      ref={ref}
+      data-sidebar="menu-badge"
+      data-variant={variant}
+      className={cn(
+        "flex items-center justify-center text-xs font-medium tabular-nums text-sidebar-foreground select-none pointer-events-none",
+        variant === "circle" ? "min-w-4 h-4 rounded-full px-1 bg-sidebar-accent/10" : "min-w-5 h-5 rounded-md px-1",
+        state === "collapsed" && "ml-1",
+        "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
+        "group-data-[collapsible=icon]:hidden",
+        className
+      )}
+      {...props}
+    />
+  )
+})
 SidebarMenuBadge.displayName = "SidebarMenuBadge"
 
 const SidebarMenuSkeleton = React.forwardRef<

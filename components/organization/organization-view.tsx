@@ -14,11 +14,10 @@ import { IntegrationsView } from "./integrations/integrations-view"
 
 interface OrganizationViewProps {
   organizationSlug: string
-  isTestOrg?: boolean
+  isTestOrg: boolean
 }
 
-// Update the beginning of the OrganizationView function to handle undefined organizationSlug
-export function OrganizationView({ organizationSlug = "", isTestOrg = false }: OrganizationViewProps) {
+export function OrganizationView({ organizationSlug, isTestOrg }: OrganizationViewProps) {
   const [activeSection, setActiveSection] = useState("overview")
   const [isLoading, setIsLoading] = useState(true)
 
