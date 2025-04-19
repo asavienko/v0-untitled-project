@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, ChevronDown, User, LogOut, Key, Shield, Bell, Star, Plus } from "lucide-react"
+import { Menu, X, ChevronDown, User, LogOut, Key, Shield, Star, Plus } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { UserAvatar } from "@/components/user-avatar"
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { ReportsView } from "./reports/reports-view"
 
 interface MobileOrganizationViewProps {
   organization: {
@@ -69,6 +70,7 @@ export function MobileOrganizationView({
     { id: "vaults", label: "Vaults", count: organization.vaults || 0 },
     { id: "members", label: "Members", count: organization.members || 0 },
     { id: "activity", label: "Activity", count: 15 },
+    { id: "reports", label: "Reports", count: 2 },
     { id: "analytics", label: "Analytics", count: 0 },
     { id: "settings", label: "Settings", count: 0 },
     { id: "security", label: "Security", count: 3 },
@@ -118,6 +120,8 @@ export function MobileOrganizationView({
         return <MembersView organization={organization} />
       case "activity":
         return <ActivityView organization={organization} />
+      case "reports":
+        return <ReportsView />
       case "settings":
         return <SettingsView organization={organization} />
       case "analytics":
@@ -252,7 +256,10 @@ export function MobileOrganizationView({
         <div className="flex-1 flex justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2 p-0 h-auto">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 p-2 h-auto border border-transparent hover:border-border hover:bg-muted/50 rounded-md transition-colors"
+              >
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                   {organization.name.charAt(0).toUpperCase()}
                 </div>
@@ -260,6 +267,7 @@ export function MobileOrganizationView({
                   <h1 className="text-sm font-medium">{organization.name}</h1>
                   <p className="text-xs text-muted-foreground">{organization.type}</p>
                 </div>
+                <ChevronDown className="ml-1 h-4 w-4 text-muted-foreground" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
@@ -299,41 +307,8 @@ export function MobileOrganizationView({
           </DropdownMenu>
         </div>
 
-        {/* Right side - Notification and user buttons */}
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-              3
-            </span>
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <UserAvatar className="h-8 w-8" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Shield className="mr-2 h-4 w-4" />
-                <span>Admin Token</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Key className="mr-2 h-4 w-4" />
-                <span>Access Token</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Right side - Empty space now that buttons are removed */}
+        <div className="flex items-center gap-2">{/* Notification and user buttons removed */}</div>
       </header>
 
       {/* Mobile Section Title */}

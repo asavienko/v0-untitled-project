@@ -30,6 +30,7 @@ import {
   ExternalLink,
   LogOut,
   Key,
+  FileText,
   type LucideIcon,
 } from "lucide-react"
 import { UserAvatar } from "@/components/user-avatar"
@@ -135,6 +136,7 @@ export function EnhancedSidebar({
     { id: "vaults", label: "Vaults", icon: Database, count: organizationSlug === "test-yiyi" ? 8 : 12 },
     { id: "members", label: "Members", icon: Users, count: organizationSlug === "test-yiyi" ? 3 : 8 },
     { id: "activity", label: "Activity", icon: Activity, count: organizationSlug === "test-yiyi" ? 15 : 24 },
+    { id: "reports", label: "Reports", icon: FileText, count: organizationSlug === "test-yiyi" ? 2 : 5 },
     { id: "analytics", label: "Analytics", icon: BarChart3, count: 0 },
   ]
 

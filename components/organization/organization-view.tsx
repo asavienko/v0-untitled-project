@@ -12,6 +12,7 @@ import { SettingsView } from "./settings/settings-view"
 import { AnalyticsView } from "./analytics/analytics-view"
 import { SecurityView } from "./security/security-view"
 import { IntegrationsView } from "./integrations/integrations-view"
+import { ReportsView } from "./reports/reports-view"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 interface OrganizationViewProps {
@@ -108,6 +109,7 @@ export function OrganizationView({ organizationSlug, isTestOrg }: OrganizationVi
                 {activeSection === "vaults" && <VaultsView organization={organization} />}
                 {activeSection === "members" && <MembersView organization={organization} />}
                 {activeSection === "activity" && <ActivityView organization={organization} />}
+                {activeSection === "reports" && <ReportsView />}
                 {activeSection === "settings" && <SettingsView organization={organization} />}
                 {activeSection === "analytics" && <AnalyticsView organization={organization} />}
                 {activeSection === "security" && <SecurityView organization={organization} />}

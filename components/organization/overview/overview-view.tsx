@@ -203,15 +203,82 @@ export function OverviewView({ organization }: OverviewViewProps) {
 
       {/* Tabs for different overview sections */}
       <Tabs defaultValue="metrics" className="w-full" onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-4 mb-4">
-          <TabsTrigger value="metrics">Metrics</TabsTrigger>
-          <TabsTrigger value="activity">Recent Activity</TabsTrigger>
-          <TabsTrigger value="status">System Status</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
-        </TabsList>
+        {/* Desktop tabs (hidden on mobile) */}
+        <div className="hidden md:block border-b mb-6">
+          <TabsList className="bg-transparent p-0 h-auto flex w-full justify-start">
+            <TabsTrigger
+              value="metrics"
+              className="flex items-center gap-1.5 px-4 py-2 h-10 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent data-[state=active]:bg-transparent text-muted-foreground data-[state=active]:text-foreground"
+            >
+              <Database className="h-4 w-4" />
+              <span>Metrics</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="activity"
+              className="flex items-center gap-1.5 px-4 py-2 h-10 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent data-[state=active]:bg-transparent text-muted-foreground data-[state=active]:text-foreground"
+            >
+              <Activity className="h-4 w-4" />
+              <span>Recent Activity</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="status"
+              className="flex items-center gap-1.5 px-4 py-2 h-10 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent data-[state=active]:bg-transparent text-muted-foreground data-[state=active]:text-foreground"
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              <span>System Status</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="team"
+              className="flex items-center gap-1.5 px-4 py-2 h-10 data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none bg-transparent data-[state=active]:bg-transparent text-muted-foreground data-[state=active]:text-foreground"
+            >
+              <Users className="h-4 w-4" />
+              <span>Team</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile tabs (visible only on mobile) */}
+        <div className="md:hidden">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center">
+              {activeTab === "metrics" && <Database className="h-5 w-5 mr-2 text-primary" />}
+              {activeTab === "activity" && <Activity className="h-5 w-5 mr-2 text-primary" />}
+              {activeTab === "status" && <CheckCircle2 className="h-5 w-5 mr-2 text-primary" />}
+              {activeTab === "team" && <Users className="h-5 w-5 mr-2 text-primary" />}
+              <h2 className="text-lg font-semibold">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h2>
+            </div>
+            <select
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+              className="bg-transparent border rounded-md px-2 py-1 text-sm"
+              aria-label="Select tab"
+            >
+              <option value="metrics">Metrics</option>
+              <option value="activity">Recent Activity</option>
+              <option value="status">System Status</option>
+              <option value="team">Team</option>
+            </select>
+          </div>
+
+          {/* Visual indicator for active tab */}
+          <div className="grid grid-cols-4 gap-1 mb-4">
+            <div
+              className={`h-1 rounded-full transition-colors duration-300 ${activeTab === "metrics" ? "bg-primary" : "bg-gray-200"}`}
+            ></div>
+            <div
+              className={`h-1 rounded-full transition-colors duration-300 ${activeTab === "activity" ? "bg-primary" : "bg-gray-200"}`}
+            ></div>
+            <div
+              className={`h-1 rounded-full transition-colors duration-300 ${activeTab === "status" ? "bg-primary" : "bg-gray-200"}`}
+            ></div>
+            <div
+              className={`h-1 rounded-full transition-colors duration-300 ${activeTab === "team" ? "bg-primary" : "bg-gray-200"}`}
+            ></div>
+          </div>
+        </div>
 
         {/* Metrics Tab */}
-        <TabsContent value="metrics" className="space-y-4">
+        <TabsContent value="metrics" className="space-y-4 animate-in fade-in duration-300">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {metrics.map((metric, index) => (
               <Card key={index}>
@@ -296,7 +363,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* Activity Tab */}
-        <TabsContent value="activity">
+        <TabsContent value="activity" className="animate-in fade-in duration-300">
           <Card>
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
@@ -333,7 +400,7 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* System Status Tab */}
-        <TabsContent value="status">
+        <TabsContent value="status" className="animate-in fade-in duration-300">
           <Card>
             <CardHeader>
               <CardTitle>System Status</CardTitle>
@@ -364,10 +431,48 @@ export function OverviewView({ organization }: OverviewViewProps) {
         </TabsContent>
 
         {/* Team Tab */}
-        <TabsContent value="team">
+        <TabsContent value="team" className="animate-in fade-in duration-300">
           <MembersPanel />
         </TabsContent>
       </Tabs>
+      {/* Bottom navigation bar for mobile */}
+      <div className="md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 bg-background border-t z-10 px-2">
+          <TabsList className="h-16 w-full bg-transparent">
+            <TabsTrigger
+              value="metrics"
+              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
+            >
+              <Database className="h-5 w-5" />
+              <span className="text-xs">Metrics</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="activity"
+              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
+            >
+              <Activity className="h-5 w-5" />
+              <span className="text-xs">Activity</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="status"
+              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
+            >
+              <CheckCircle2 className="h-5 w-5" />
+              <span className="text-xs">Status</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="team"
+              className="flex flex-col items-center justify-center h-full flex-1 gap-1 rounded-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-primary text-muted-foreground"
+            >
+              <Users className="h-5 w-5" />
+              <span className="text-xs">Team</span>
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Add padding to prevent content from being hidden behind the bottom nav */}
+        <div className="pb-16 md:pb-0"></div>
+      </div>
     </div>
   )
 }
