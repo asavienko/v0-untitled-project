@@ -135,15 +135,14 @@ export function MobileOrganizationView({
     <div className="flex flex-col h-full">
       {/* Mobile Header */}
       <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-background px-4">
-        <div className="flex items-center gap-3">
+        {/* Left side - Menu button */}
+        <Button variant="ghost" size="icon" className="md:hidden">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Toggle menu</span>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[80%] max-w-[300px] p-0">
+            <SheetContent side="left" className="w-[80%] max-w-[300px] p-0" closeButton={false}>
               <div className="flex flex-col h-full">
                 {/* Mobile Menu Header */}
                 <div className="flex items-center justify-between border-b p-4">
@@ -247,58 +246,60 @@ export function MobileOrganizationView({
               </div>
             </SheetContent>
           </Sheet>
+        </Button>
 
-          <div className="flex items-center">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center gap-2 p-0 h-auto">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                    {organization.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <h1 className="text-sm font-medium">{organization.name}</h1>
-                    <p className="text-xs text-muted-foreground">{organization.type}</p>
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <div className="p-2">
-                  <h3 className="mb-2 text-xs font-medium text-muted-foreground">Organizations</h3>
-                  {organizations.map((org) => (
-                    <DropdownMenuItem key={org.id} asChild>
-                      <Link href={`/organization/${org.slug}/new-view`} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-xs font-medium text-primary">
-                            {org.name.charAt(0).toUpperCase()}
-                          </div>
-                          <span>{org.name}</span>
-                        </div>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            toggleFavorite(org.id)
-                          }}
-                          className="text-muted-foreground hover:text-yellow-400"
-                        >
-                          <Star className={`h-4 w-4 ${org.isFavorite ? "fill-yellow-400 text-yellow-400" : ""}`} />
-                        </button>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
+        {/* Center - Organization dropdown */}
+        <div className="flex-1 flex justify-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center gap-2 p-0 h-auto">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                  {organization.name.charAt(0).toUpperCase()}
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <div className="flex w-full items-center gap-2 text-sm">
-                    <Plus className="h-4 w-4" />
-                    <span>Create Organization</span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                <div>
+                  <h1 className="text-sm font-medium">{organization.name}</h1>
+                  <p className="text-xs text-muted-foreground">{organization.type}</p>
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <div className="p-2">
+                <h3 className="mb-2 text-xs font-medium text-muted-foreground">Organizations</h3>
+                {organizations.map((org) => (
+                  <DropdownMenuItem key={org.id} asChild>
+                    <Link href={`/organization/${org.slug}/new-view`} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-xs font-medium text-primary">
+                          {org.name.charAt(0).toUpperCase()}
+                        </div>
+                        <span>{org.name}</span>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          toggleFavorite(org.id)
+                        }}
+                        className="text-muted-foreground hover:text-yellow-400"
+                      >
+                        <Star className={`h-4 w-4 ${org.isFavorite ? "fill-yellow-400 text-yellow-400" : ""}`} />
+                      </button>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <div className="flex w-full items-center gap-2 text-sm">
+                  <Plus className="h-4 w-4" />
+                  <span>Create Organization</span>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
+        {/* Right side - Notification and user buttons */}
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5" />
