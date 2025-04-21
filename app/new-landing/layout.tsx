@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter, Montserrat, Space_Grotesk, JetBrains_Mono } from "next/font/google"
-import "./globals.css"
+import "../globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({
@@ -29,13 +29,12 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "KaaS - K Framework as a Service",
+  title: "KaaS - K Framework as a Service | New Experience",
   description:
     "Cloud platform for running the full K Framework tool-chain at scale, with proof caching and dedicated compute.",
-    generator: 'v0.dev'
 }
 
-export default function RootLayout({
+export default function NewLandingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
